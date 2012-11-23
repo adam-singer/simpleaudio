@@ -67,47 +67,17 @@ void main() {
   {
     InputElement ie;
     ie = query("#positionX");
-    ie.on.change.add((e) => adjustPosition("x", "position", ie));
+    ie.on.change.add((e) => adjustPosition("x", ie));
   }
   {
     InputElement ie;
     ie = query("#positionY");
-    ie.on.change.add((e) => adjustPosition("y", "position", ie));
+    ie.on.change.add((e) => adjustPosition("y", ie));
   }
   {
     InputElement ie;
     ie = query("#positionZ");
-    ie.on.change.add((e) => adjustPosition("z", "position", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#orientationX");
-    ie.on.change.add((e) => adjustPosition("x", "orientation", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#orientationY");
-    ie.on.change.add((e) => adjustPosition("y", "orientation", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#orientationZ");
-    ie.on.change.add((e) => adjustPosition("z", "orientation", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#velocityX");
-    ie.on.change.add((e) => adjustPosition("x", "velocity", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#velocityY");
-    ie.on.change.add((e) => adjustPosition("y", "velocity", ie));
-  }
-  {
-    InputElement ie;
-    ie = query("#velocityZ");
-    ie.on.change.add((e) => adjustPosition("z", "velocity", ie));
+    ie.on.change.add((e) => adjustPosition("z", ie));
   }
   
   query("#mute")
@@ -172,42 +142,28 @@ void adjustVolume(String volume, InputElement el) {
   print('$volume -> $val');
 }
 
-void adjustPosition(String axis, String control, InputElement el) {
+void adjustPosition(String axis, InputElement el) {
   num val = el.valueAsNumber;
   num x,y,z;
   switch (axis) {
     case "x":
       x = val;
-      y = query("#${control}Y").valueAsNumber;
-      z = query("#${control}Z").valueAsNumber;
+      y = query("#positionY").valueAsNumber;
+      z = query("#positionZ").valueAsNumber;
       break;
     case "y":
       y = val;
-      x = query("#${control}X").valueAsNumber;
-      z = query("#${control}Z").valueAsNumber;
+      x = query("#positionX").valueAsNumber;
+      z = query("#positionZ").valueAsNumber;
       break;
     case "z":
       z = val;
-      x = query("#${control}X").valueAsNumber;
-      y = query("#${control}Y").valueAsNumber;
+      x = query("#positionX").valueAsNumber;
+      y = query("#positionY").valueAsNumber;
       break;
   }
   
-  switch (control) {
-    case "position":
-      audioManager.setPosition(x, y, z);
-      break;
-    case "orientation":
-      audioManager.setOrientation(x, y, z, 
-          query("#${control}Xup").valueAsNumber, 
-          query("#${control}Yup").valueAsNumber, 
-          query("#${control}Zup").valueAsNumber);
-      break;
-    case "velocity":
-      audioManager.setVelocity(x, y, z);
-      break;
-  }
-  
+  audioManager.setPosition(x, y, z);  
 }
 
 void muteEverything(Event event) {
