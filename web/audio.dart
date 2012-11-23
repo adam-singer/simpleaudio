@@ -63,7 +63,53 @@ void main() {
     InputElement ie;
     ie = query("#sourceVolume");
     ie.on.change.add((e) => adjustVolume("source", ie));
+  } 
+  {
+    InputElement ie;
+    ie = query("#positionX");
+    ie.on.change.add((e) => adjustPosition("x", "position", ie));
   }
+  {
+    InputElement ie;
+    ie = query("#positionY");
+    ie.on.change.add((e) => adjustPosition("y", "position", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#positionZ");
+    ie.on.change.add((e) => adjustPosition("z", "position", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#orientationX");
+    ie.on.change.add((e) => adjustPosition("x", "orientation", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#orientationY");
+    ie.on.change.add((e) => adjustPosition("y", "orientation", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#orientationZ");
+    ie.on.change.add((e) => adjustPosition("z", "orientation", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#velocityX");
+    ie.on.change.add((e) => adjustPosition("x", "velocity", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#velocityY");
+    ie.on.change.add((e) => adjustPosition("y", "velocity", ie));
+  }
+  {
+    InputElement ie;
+    ie = query("#velocityZ");
+    ie.on.change.add((e) => adjustPosition("z", "velocity", ie));
+  }
+  
   query("#mute")
     ..on.click.add(muteEverything);
 }
@@ -124,6 +170,44 @@ void adjustVolume(String volume, InputElement el) {
     audioManager.sourceVolume = val;
   }
   print('$volume -> $val');
+}
+
+void adjustPosition(String axis, String control, InputElement el) {
+  num val = el.valueAsNumber;
+  num x,y,z;
+  switch (axis) {
+    case "x":
+      x = val;
+      y = query("#${control}Y").valueAsNumber;
+      z = query("#${control}Z").valueAsNumber;
+      break;
+    case "y":
+      y = val;
+      x = query("#${control}X").valueAsNumber;
+      z = query("#${control}Z").valueAsNumber;
+      break;
+    case "z":
+      z = val;
+      x = query("#${control}X").valueAsNumber;
+      y = query("#${control}Y").valueAsNumber;
+      break;
+  }
+  
+  switch (control) {
+    case "position":
+      audioManager.setPosition(x, y, z);
+      break;
+    case "orientation":
+      audioManager.setOrientation(x, y, z, 
+          query("#${control}Xup").valueAsNumber, 
+          query("#${control}Yup").valueAsNumber, 
+          query("#${control}Zup").valueAsNumber);
+      break;
+    case "velocity":
+      audioManager.setVelocity(x, y, z);
+      break;
+  }
+  
 }
 
 void muteEverything(Event event) {
